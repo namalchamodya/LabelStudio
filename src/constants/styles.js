@@ -12,6 +12,7 @@ export const FONT_FAMILIES = [
   { name: 'Cursive', value: 'cursive' }
 ];
 
+// --- MAIN STYLES ---
 export const styles = {
   app: { fontFamily: "'Inter', sans-serif", display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#f4f4f9', color: '#333', overflow: 'hidden' },
   sidebar: { width: '260px', backgroundColor: '#fff', borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', zIndex: 20, height: '100%' },
@@ -42,10 +43,9 @@ export const printStyles = `
 @media print {
   @page { margin: 0; size: auto; }
   
-  /* Hide non-printable elements */
   body * { visibility: hidden; }
   
-  /* Reset Layout to allow full flow */
+  /* Unlock layout for printing */
   html, body, #app-root, #root {
     height: auto !important;
     width: 100% !important;
@@ -56,12 +56,12 @@ export const printStyles = `
     background: white !important;
   }
 
-  /* Hide UI Components */
+  /* Hide UI */
   .no-print, #sidebar, #toolbar, #properties-panel, #mobile-header {
     display: none !important;
   }
 
-  /* Target the specific print container */
+  /* Show Print Content */
   #print-scroll-container, #print-scroll-container * {
     visibility: visible !important;
   }
@@ -79,12 +79,12 @@ export const printStyles = `
     z-index: 9999;
   }
 
-  /* Style Individual Sheets */
+  /* Sheets */
   .print-sheet {
     display: block !important;
     position: relative !important;
     width: 100% !important;
-    height: 100% !important; 
+    height: auto !important; 
     margin: 0 auto !important;
     padding: 0 !important;
     border: none !important;
@@ -93,7 +93,6 @@ export const printStyles = `
     break-after: page !important;
   }
 
-  /* Stop extra blank page at end */
   .print-sheet:last-child {
     page-break-after: auto !important;
     break-after: auto !important;

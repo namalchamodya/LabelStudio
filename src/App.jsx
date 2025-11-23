@@ -7,21 +7,20 @@ import DesignWorkspace from './components/DesignWorkspace';
 import DataWorkspace from './components/DataWorkspace';
 import PrintWorkspace from './components/PrintWorkspace';
 import PropertiesPanel from './components/PropertiesPanel';
-import { jsPDF } from 'jspdf';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('design');
-  const [labelSize, setLabelSize] = useState({ width: 60, height: 40 });
-
+  const [activeTab, setActiveTab] = useState('design'); 
+  const [labelSize, setLabelSize] = useState({ width: 60, height: 40 }); 
+  
   const [elements, setElements] = useState([
     { id: 'bg', type: 'rect', x: 0, y: 0, width: 60, height: 40, fill: '#ffffff', stroke: '#dddddd', strokeWidth: 0, isBackground: true },
     { id: 'qr1', type: 'qr', x: 5, y: 5, width: 20, height: 20, text: 'ELIoT-20010' },
     { id: 'txt1', type: 'text', x: 30, y: 15, text: 'ELIoT Device', fontSize: 10, fontFamily: 'Arial', fill: '#000000' },
     { id: 'var1', type: 'variable', x: 30, y: 25, text: '{code}', fontSize: 8, fontFamily: 'Courier New', fill: '#333333' }
   ]);
-
+  
   const [selectedId, setSelectedId] = useState(null);
-
+  
   const [batchSettings, setBatchSettings] = useState({
     mode: 'sequence', prefix: 'ELIoT-', start: 20010, end: 20025, customList: ''
   });
@@ -36,13 +35,13 @@ export default function App() {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      if (!mobile) { setIsSidebarOpen(true); setIsPropsOpen(true); }
+      if (!mobile) { setIsSidebarOpen(true); setIsPropsOpen(true); } 
       else { setIsSidebarOpen(false); setIsPropsOpen(false); }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  
   const handleAiSlogan = async () => {
     const topic = prompt("What is this label for?");
     if (!topic) return;
@@ -50,12 +49,8 @@ export default function App() {
     const slogan = await callGemini(`Write a 3-word slogan about "${topic}". Return ONLY text.`);
     setIsAiLoading(false);
     if (slogan) {
-      const newId = crypto.randomUUID();
-      setElements(prev => [...prev, {
-        id: newId, type: 'text', x: 10, y: 30,
-        text: slogan.trim().replace(/"/g, ''),
-        fontSize: 8, fontFamily: 'Arial', fill: '#000000'
-      }]);
+      const newId = Math.random().toString(36).substr(2, 9);
+      setElements([...elements, { id: newId, type: 'text', x: 10, y: 30, text: slogan.trim().replace(/"/g, ''), fontSize: 8, fontFamily: 'Arial', fill: '#000000' }]);
       setSelectedId(newId);
     }
   };
@@ -63,11 +58,11 @@ export default function App() {
   const handleImageUpload = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const newId = crypto.randomUUID();
-      setElements(prev => [...prev, {
-        id: newId, type: 'image', x: 0, y: 0,
-        width: labelSize.width, height: labelSize.height,
-        src: e.target.result, isBackground: false
+      const newId = Math.random().toString(36).substr(2, 9);
+      setElements([...elements, {
+        id: newId, type: 'image', x: 0, y: 0, 
+        width: labelSize.width, height: labelSize.height, 
+        src: e.target.result, isBackground: false 
       }]);
       setSelectedId(newId);
     };
@@ -76,86 +71,62 @@ export default function App() {
 
   const handleAddElement = (type) => {
     if (type === 'ai-slogan') { handleAiSlogan(); return; }
-    const newId = crypto.randomUUID();
+    const newId = Math.random().toString(36).substr(2, 9);
     let base = { id: newId, type, x: 10, y: 10 };
     if (type === 'rect') base = { ...base, width: 20, height: 20, fill: 'transparent', stroke: '#000000', strokeWidth: 1 };
     if (type === 'text') base = { ...base, text: 'New Text', fontSize: 10, fontFamily: 'Arial', fill: '#000000' };
     if (type === 'variable') base = { ...base, text: '{code}', fontSize: 10, fontFamily: 'Courier New', fill: '#000000' };
     if (type === 'qr') base = { ...base, width: 20, height: 20, text: 'QR CODE' };
-    setElements(prev => [...prev, base]);
+    setElements([...elements, base]);
     setSelectedId(newId);
-    if (isMobile) setIsSidebarOpen(false);
+    if(isMobile) setIsSidebarOpen(false);
   };
 
   const updateElement = (id, props) => {
-    setElements(prev => prev.map(el => el.id === id ? { ...el, ...props } : el));
+    setElements(elements.map(el => el.id === id ? { ...el, ...props } : el));
   };
 
   const deleteElement = (id) => {
     const el = elements.find(e => e.id === id);
-    if (el && el.isBackground) return;
-    setElements(prev => prev.filter(el => el.id !== id));
+    if (el && el.isBackground) return; 
+    setElements(elements.filter(el => el.id !== id));
     setSelectedId(null);
   };
 
-  const handleExportPdf = () => {
-    const doc = new jsPDF({
-      unit: 'mm',
-      format: [PAPER_SIZES[paperSize].width, PAPER_SIZES[paperSize].height]
-    });
-  
-    // Example: render each text/variable element
-    elements.forEach(el => {
-      if (el.type === 'text' || el.type === 'variable') {
-        doc.setFont(el.fontFamily || 'Arial');
-        doc.setFontSize(el.fontSize || 10);
-        doc.text(el.text || '', el.x, el.y);
-      }
-      // You can extend this to draw rects, QR codes, images, etc.
-    });
-  
-    doc.save(`labels_${batchSettings.prefix || 'batch'}.pdf`);
-  };
-  
-
   return (
-    <div id="app-root" style={{ ...styles.app, flexDirection: 'column' }}>
-      <div
-        id="mobile-header"
-        className="no-print"
-        style={{
-          display: isMobile ? 'flex' : 'none', padding: '10px', background: 'white',
-          borderBottom: '1px solid #ddd', alignItems: 'center', justifyContent: 'space-between'
-        }}>
-        <button aria-label="Toggle sidebar" onClick={() => setIsSidebarOpen(!isSidebarOpen)} style={{ background: 'none', border: 'none' }}><Menu /></button>
-        <strong>LabelStudio</strong>
-        <button aria-label="Toggle properties" onClick={() => setIsPropsOpen(!isPropsOpen)} style={{ background: 'none', border: 'none' }}><Settings /></button>
+    <div id="app-root" style={{...styles.app, flexDirection: 'column'}}>
+      
+      <div id="mobile-header" className="no-print" style={{ display: isMobile ? 'flex' : 'none', padding: '10px', background: 'white', borderBottom: '1px solid #ddd', alignItems: 'center', justifyContent: 'space-between' }}>
+        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} style={{background:'none', border:'none'}}><Menu /></button>
+        <span style={{fontWeight: 'bold'}}>LabelStudio</span>
+        <button onClick={() => setIsPropsOpen(!isPropsOpen)} style={{background:'none', border:'none'}}><Settings /></button>
       </div>
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
-        <div id="sidebar" className="no-print" style={{ display: isSidebarOpen || !isMobile ? 'block' : 'none' }}>
-          <Sidebar
-            activeTab={activeTab} setActiveTab={setActiveTab}
-            onAddElement={handleAddElement} onUploadImage={handleImageUpload}
-            isAiLoading={isAiLoading}
+        
+        <div id="sidebar" className="no-print" style={{display: isSidebarOpen || !isMobile ? 'block' : 'none'}}>
+          <Sidebar 
+            activeTab={activeTab} setActiveTab={setActiveTab} 
+            onAddElement={handleAddElement} onUploadImage={handleImageUpload} 
+            isAiLoading={isAiLoading} 
             isMobile={isMobile} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}
           />
         </div>
 
-        <div style={styles.main}>
+        <div style={{...styles.main, overflow: 'hidden'}}>
           <div id="toolbar" className="no-print" style={styles.toolbar}>
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
               <span style={{ fontWeight: 600 }}>
                 {activeTab === 'design' ? 'Editor' : activeTab === 'layers' ? 'Layers' : activeTab === 'data' ? 'Data' : 'Print'}
               </span>
               {activeTab === 'design' && (
-                <div style={{ fontSize: '12px', color: '#666', background: '#eee', padding: '4px 8px', borderRadius: '4px' }}>
-                  {labelSize.width}mm x {labelSize.height}mm
-                </div>
+                 <div style={{ fontSize: '12px', color: '#666', background: '#eee', padding: '4px 8px', borderRadius: '4px' }}>
+                   {labelSize.width}mm x {labelSize.height}mm
+                 </div>
               )}
             </div>
             {activeTab === 'print' && (
-              <button style={{ ...styles.toolBtn, background: '#4f46e5', color: 'white' }} onClick={handleExportPdf}>
+              <button style={{...styles.toolBtn, background: '#4f46e5', color: 'white'}} onClick={() => window.print()}>
                 <Printer size={16} /> Print PDF
               </button>
             )}
@@ -163,90 +134,77 @@ export default function App() {
 
           <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             {(activeTab === 'design' || activeTab === 'layers') && (
-              <DesignWorkspace
-                labelSize={labelSize} elements={elements} selectedId={selectedId}
-                onSelect={(id) => setSelectedId(id)}
-                onUpdate={updateElement} onDelete={deleteElement}
+              <DesignWorkspace 
+                labelSize={labelSize} elements={elements} selectedId={selectedId} 
+                onSelect={(id) => setSelectedId(id)} 
+                onUpdate={updateElement} onDelete={deleteElement} 
               />
             )}
-            {activeTab === 'data' && (
-              <DataWorkspace
-                batchSettings={batchSettings} setBatchSettings={setBatchSettings}
-                isAiLoading={isAiLoading}
-              />
-            )}
-            {activeTab === 'print' && (
-              <PrintWorkspace
-                paperSize={PAPER_SIZES[paperSize]}
-                labelSize={labelSize}
-                elements={elements}
-                batchSettings={batchSettings}
-              />
-            )}
+            {activeTab === 'data' && <DataWorkspace batchSettings={batchSettings} setBatchSettings={setBatchSettings} isAiLoading={isAiLoading} />}
+            {activeTab === 'print' && <PrintWorkspace paperSize={PAPER_SIZES[paperSize]} labelSize={labelSize} elements={elements} batchSettings={batchSettings} />}
           </div>
         </div>
 
-        <div id="properties-panel" className="no-print" style={{ display: isPropsOpen || !isMobile ? 'block' : 'none' }}>
-          <PropertiesPanel
-            activeTab={activeTab} selectedId={selectedId} elements={elements}
-            onUpdate={updateElement} onDelete={deleteElement}
-            labelSize={labelSize} setLabelSize={setLabelSize}
+        <div id="properties-panel" className="no-print" style={{display: isPropsOpen || !isMobile ? 'block' : 'none'}}>
+          <PropertiesPanel 
+            activeTab={activeTab} selectedId={selectedId} elements={elements} 
+            onUpdate={updateElement} onDelete={deleteElement} 
+            labelSize={labelSize} setLabelSize={setLabelSize} 
             batchSettings={batchSettings} paperSize={paperSize} setPaperSize={setPaperSize}
-            setElements={setElements} onSelect={setSelectedId}
-            isMobile={isMobile} isOpen={isPropsOpen} setIsOpen={setIsPropsOpen}
+            setElements={setElements} 
+            onSelect={setSelectedId} 
+            isMobile={isMobile} isOpen={isPropsOpen} setIsOpen={setIsPropsOpen} 
           />
         </div>
       </div>
 
-      {/* --- FIXED MULTI-PAGE PRINT CSS --- */}
       <style>{`
         @media print {
-          @page {
-            margin: 0;
-            size: auto;
+          @page { 
+            margin: 0; 
+            size: auto; 
           }
-
-          /* Reset to natural flow */
-          html, body, #app-root, #root {
+          
+          html, body, #app-root {
             height: auto !important;
             width: 100% !important;
-            overflow: visible !important;
             margin: 0 !important;
             padding: 0 !important;
-            display: block !important;
+            overflow: visible !important;
             background: white !important;
+            display: block !important;
           }
 
-          /* Hide UI */
           .no-print, #sidebar, #toolbar, #properties-panel, #mobile-header {
             display: none !important;
           }
 
-          /* Print container in normal flow */
           #print-scroll-container {
-            position: static !important;
+            position: relative !important;
             top: auto !important;
             left: auto !important;
             width: 100% !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 0 !important;
             display: block !important;
+            visibility: visible !important;
             overflow: visible !important;
-            height: auto !important;
-            background: white !important;
+          }
+          
+          #print-scroll-container * {
+            visibility: visible !important;
           }
 
-          /* Each sheet must be a block with page break */
           .print-sheet {
+            position: relative !important;
             display: block !important;
-            position: static !important;
             width: 100% !important;
-            height: auto !important;
-            margin: 0 !important;
+            height: auto !important; 
+            margin: 0 auto !important;
             padding: 0 !important;
             border: none !important;
             box-shadow: none !important;
-
             page-break-after: always !important;
             break-after: page !important;
           }
