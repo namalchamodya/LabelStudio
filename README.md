@@ -1,16 +1,72 @@
-# React + Vite
+# 🏷️ LabelStudio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LabelStudio is a modern web application for designing, generating, and printing professional QR code labels. It features AI-powered tools, custom QR designs (with logos), and export options for both standard printers and laser cutters.
 
-Currently, two official plugins are available:
+[View Demo](https://labelstudio.netlify.app/) . [Report Bug]() . [Request Feature]()
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+![Design Interface](https://github.com/namalchamodya/LabelStudio/blob/main/public/ss1.png)
+![Design Interface](https://github.com/namalchamodya/LabelStudio/blob/main/public/ss2.png)
+![Design Interface](https://github.com/namalchamodya/LabelStudio/blob/main/public/ss3.png)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Key Features
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+ ### Powerful Design Tools
+
+- Visual Editor: Drag-and-drop Text, Rectangles, Images, and QR Codes.
+
+- Layer Management: Reorder elements with a dedicated layers panel (Move to Front/Back/Up/Down).
+
+- Rich Text: Customize fonts, weights (Bold/Italic), and text decoration (Underline).
+
+### Advanced QR Generation
+
+- Starbucks-Style QRs: Generates aesthetic QR codes with circular dots.
+
+- Embedded Logos: Automatically calculates a "safe zone" in the center of the QR code to embed your logo without breaking scanability.
+
+- High Reliability: Uses 'H' (High) Error Correction to ensure robustness.
+
+### Production Ready
+
+- Smart Printing: Automatically calculates grid layouts for A4, A3, and US Letter paper sizes.
+
+- Multi-Page PDF: Generates clean, multi-page PDFs for standard office printers.
+
+- Laser Cutting Export: Exports to ```.svg``` with industry-standard Red Hairline (0.1mm) cuts and Black fills for engraving. Compatible with LightBurn, RDWorks, etc.
+
+-  Mobile Friendly: Fully responsive interface for designing on phones or tablets.
+  
+-  Batch Data: Generate sequences (e.g., ITEM-001 to ITEM-050) automatically.
+
+## How to Run
+
+1. **Clone the repository**
+ <br> git clone [https://github.com/namalchamodya/LabelStudio.git](https://github.com/namalchamodya/LabelStudio.git)
+</br>  ```cd LabelStudio``` 
+2. **Install Dependencies**
+ <br>Install the required libraries (React, QR Code, Lucide, etc.):
+<br>```npm install```
+3. **Configure Environment Variables**
+   <br>Create a new file named ```.env``` in the root folder of your project. Paste your API key inside it like this:
+   <br>```VITE_GEMINI_API_KEY=your_google_gemini_api_key_here```
+4. **Start the App**
+   <br>Run the development server:
+   <br>```npm run dev```
+   <br>The app should now be running at ```http://localhost:5173```.
+   
+## License
+
+Distributed under the ```MIT``` License. See LICENSE for more information.
+
+## Author
+
+Namal Chamodya <br>
+- Website: website.com <br>
+- fb: [@na_mal_chamo_d_ya](https://www.facebook.com/namal.chamodya.2025) <br>
+- insta: [@na_mal_chamo_d_ya](https://www.instagram.com/na_mal_chamo_d_ya/) <br>
+
+
+
+
