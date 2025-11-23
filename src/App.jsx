@@ -13,16 +13,16 @@ export default function App() {
   const [labelSize, setLabelSize] = useState({ width: 60, height: 40 }); 
   
   const [elements, setElements] = useState([
-    { id: 'bg', type: 'rect', x: 0, y: 0, width: 60, height: 40, fill: '#ffffff', stroke: '#dddddd', strokeWidth: 0, isBackground: true },
-    { id: 'qr1', type: 'qr', x: 5, y: 5, width: 20, height: 20, text: 'ELIoT-20010' },
-    { id: 'txt1', type: 'text', x: 30, y: 15, text: 'ELIoT Device', fontSize: 10, fontFamily: 'Arial', fill: '#000000' },
-    { id: 'var1', type: 'variable', x: 30, y: 25, text: '{code}', fontSize: 8, fontFamily: 'Courier New', fill: '#333333' }
+    { id: 'bg', type: 'rect', x: 0, y: 0, width: 60, height: 40, fill: '#ffffff', stroke: '#dddddd', strokeWidth: 0, rx: 0, isBackground: true },
+    { id: 'qr1', type: 'qr', x: 5, y: 5, width: 20, height: 20, text: 'ABC-20010' },
+    { id: 'txt1', type: 'text', x: 30, y: 15, text: 'TEXT', fontSize: 10, fontFamily: 'Arial, sans-serif', fill: '#000000', fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none' },
+    { id: 'var1', type: 'variable', x: 30, y: 25, text: '{code}', fontSize: 8, fontFamily: '"Courier New", monospace', fill: '#333333', fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none' }
   ]);
   
   const [selectedId, setSelectedId] = useState(null);
   
   const [batchSettings, setBatchSettings] = useState({
-    mode: 'sequence', prefix: 'ELIoT-', start: 20010, end: 20025, customList: ''
+    mode: 'sequence', prefix: 'ABC-', start: 20010, end: 20025, customList: ''
   });
 
   const [paperSize, setPaperSize] = useState('a4');
@@ -73,7 +73,7 @@ export default function App() {
     if (type === 'ai-slogan') { handleAiSlogan(); return; }
     const newId = Math.random().toString(36).substr(2, 9);
     let base = { id: newId, type, x: 10, y: 10 };
-    if (type === 'rect') base = { ...base, width: 20, height: 20, fill: 'transparent', stroke: '#000000', strokeWidth: 1 };
+    if (type === 'rect') base = { ...base, width: 20, height: 20, fill: 'transparent', stroke: '#000000', strokeWidth: 1, rx: 0 };
     if (type === 'text') base = { ...base, text: 'New Text', fontSize: 10, fontFamily: 'Arial', fill: '#000000' };
     if (type === 'variable') base = { ...base, text: '{code}', fontSize: 10, fontFamily: 'Courier New', fill: '#000000' };
     if (type === 'qr') base = { ...base, width: 20, height: 20, text: 'QR CODE' };

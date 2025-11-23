@@ -68,9 +68,9 @@ export default function PrintWorkspace({ paperSize, labelSize, elements, batchSe
         elements.forEach(el => {
           if (el.type === 'rect') {
             if (el.isBackground) {
-                if(showCutLines) svgBody += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" class="cut-line" />`;
+              if(showCutLines) svgBody += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" rx="${el.rx || 0}" class="cut-line" />`;
             } else {
-                svgBody += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" fill="${el.fill}" stroke="${el.stroke}" stroke-width="${el.strokeWidth}" />`;
+              svgBody += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" rx="${el.rx || 0}" fill="${el.fill}" stroke="${el.stroke}" stroke-width="${el.strokeWidth}" />`;
             }
           }
           else if (el.type === 'text' || el.type === 'variable') {
@@ -258,10 +258,10 @@ export default function PrintWorkspace({ paperSize, labelSize, elements, batchSe
         if (el.type === 'rect') {
           if (el.isBackground) {
             if (showCutLines) {
-              svg += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" class="cut-line" />`;
+              svg += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" rx="${el.rx || 0}" class="cut-line" />`;
             }
           } else {
-            svg += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" fill="${el.fill || 'none'}" stroke="${el.stroke || 'none'}" stroke-width="${el.strokeWidth || 0}" />`;
+            svg += `<rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" rx="${el.rx || 0}" fill="${el.fill || 'none'}" stroke="${el.stroke || 'none'}" stroke-width="${el.strokeWidth || 0}" />`;
           }
         } 
         else if (el.type === 'text' || el.type === 'variable') {

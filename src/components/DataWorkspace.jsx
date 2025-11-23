@@ -56,7 +56,7 @@ export default function DataWorkspace({ batchSettings, setBatchSettings, isAiLoa
           <>
             <div style={styles.inputGroup}>
               <label style={styles.label}>Prefix String</label>
-              <input type="text" style={styles.input} value={batchSettings.prefix} placeholder="e.g. ELIoT-" onChange={(e) => setBatchSettings({...batchSettings, prefix: e.target.value})} />
+              <input type="text" style={styles.input} value={batchSettings.prefix} placeholder="e.g. ABC-" onChange={(e) => setBatchSettings({...batchSettings, prefix: e.target.value})} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
               <div style={styles.inputGroup}><label style={styles.label}>Start Number</label><input type="number" style={styles.input} value={batchSettings.start} onChange={(e) => setBatchSettings({...batchSettings, start: Number(e.target.value)})} /></div>

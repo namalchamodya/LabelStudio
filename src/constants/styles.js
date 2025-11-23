@@ -36,6 +36,9 @@ export const styles = {
   printPreview: { padding: '40px', overflow: 'auto', height: '100%', backgroundColor: '#525659' },
   sheet: { backgroundColor: 'white', margin: '0 auto', boxShadow: '0 0 10px rgba(0,0,0,0.3)', position: 'relative', overflow: 'hidden' },
   aiBtn: { width: '100%', padding: '10px', background: 'linear-gradient(90deg, #4f46e5, #7c3aed)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 'bold', marginBottom: '10px' }
+
+
+
 };
 
 // --- GLOBAL PRINT CSS ---

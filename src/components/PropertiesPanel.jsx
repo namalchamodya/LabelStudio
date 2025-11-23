@@ -172,10 +172,29 @@ export default function PropertiesPanel({
                 </div>
 
                 {(el.type === 'rect' || el.type === 'qr' || el.type === 'image') && (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <div style={styles.inputGroup}><label style={styles.label}>W</label><input type="number" style={styles.input} value={Math.round(el.width)} onChange={(e) => onUpdate(el.id, { width: Number(e.target.value) })} /></div>
-                    <div style={styles.inputGroup}><label style={styles.label}>H</label><input type="number" style={styles.input} value={Math.round(el.height)} onChange={(e) => onUpdate(el.id, { height: Number(e.target.value) })} /></div>
-                  </div>
+                  <>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div style={styles.inputGroup}><label style={styles.label}>W</label><input type="number" style={styles.input} value={Math.round(el.width)} onChange={(e) => onUpdate(el.id, { width: Number(e.target.value) })} /></div>
+                      <div style={styles.inputGroup}><label style={styles.label}>H</label><input type="number" style={styles.input} value={Math.round(el.height)} onChange={(e) => onUpdate(el.id, { height: Number(e.target.value) })} /></div>
+                    </div>
+                    
+                    {/* Add Corner Radius Control for Rectangles */}
+                    {el.type === 'rect' && (
+                      <div style={styles.inputGroup}>
+                        <label style={styles.label}>Corner Radius</label>
+                        <input 
+                          type="range" 
+                          min="0" 
+                          max={Math.min(el.width, el.height) / 2} 
+                          step="0.5"
+                          value={el.rx || 0} 
+                          onChange={(e) => onUpdate(el.id, { rx: Number(e.target.value) })} 
+                          style={{ width: '100%' }}
+                        />
+                        <div style={{ fontSize: '11px', color: '#666', marginTop: '5px' }}>{(el.rx || 0).toFixed(1)}mm</div>
+                      </div>
+                    )}
+                  </>
                 )}
 
                 {/* QR Logo Upload */}

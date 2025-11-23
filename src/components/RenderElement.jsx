@@ -10,6 +10,7 @@ export default function RenderElement({ element, selected }) {
       <rect 
         width={element.width} 
         height={element.height} 
+        rx={element.rx || 0}
         fill={element.fill} 
         stroke={element.stroke} 
         strokeWidth={element.strokeWidth}
