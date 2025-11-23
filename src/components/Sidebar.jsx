@@ -1,8 +1,14 @@
 import React, { useRef } from 'react';
 import { styles } from '../constants/styles';
-import { Grid, Layout, List, Printer, Square, Type, Hash, Sparkles, Image as ImageIcon, X, QrCode } from 'lucide-react';
+import { 
+  Layout, List, Printer, Square, Type, Hash, Sparkles, 
+  Image as ImageIcon, X, QrCode, Layers, ExternalLink 
+} from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, onAddElement, onUploadImage, isAiLoading, isMobile, isOpen, setIsOpen }) {
+export default function Sidebar({ 
+  activeTab, setActiveTab, onAddElement, onUploadImage, 
+  isAiLoading, isMobile, isOpen, setIsOpen 
+}) {
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -12,14 +18,21 @@ export default function Sidebar({ activeTab, setActiveTab, onAddElement, onUploa
   };
 
   const sidebarStyle = isMobile 
-    ? { ...styles.sidebar, position: 'absolute', left: isOpen ? 0 : '-270px', height: '100%', transition: 'left 0.3s ease', boxShadow: isOpen ? '5px 0 15px rgba(0,0,0,0.1)' : 'none' }
+    ? { 
+        ...styles.sidebar, 
+        position: 'absolute', 
+        left: isOpen ? 0 : '-270px', 
+        height: '100%', 
+        transition: 'left 0.3s ease',
+        boxShadow: isOpen ? '5px 0 15px rgba(0,0,0,0.1)' : 'none'
+      }
     : styles.sidebar;
 
   return (
-    <div style={sidebarStyle}>
+    <div id="sidebar" className="no-print" style={sidebarStyle}>
       <div style={styles.sidebarHeader}>
         <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-          <Grid size={24} color="#4f46e5" /> 
+        <img src="/favicon.png" alt="LabelStudio" style={{ height: '28px', marginRight: '5px', objectFit: 'contain' }} />
           <span>LabelStudio</span>
         </div>
         {isMobile && <button onClick={() => setIsOpen(false)} style={{background:'none', border:'none'}}><X size={20}/></button>}
@@ -32,7 +45,7 @@ export default function Sidebar({ activeTab, setActiveTab, onAddElement, onUploa
       </div>
 
       {activeTab === 'design' && (
-        <div style={{ padding: '20px', borderTop: '1px solid #eee' }}>
+        <div style={{ padding: '20px', borderTop: '1px solid #eee', flex: 1, overflowY: 'auto' }}>
           <div style={styles.label}>Tools</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '10px' }}>
             <ToolBtn icon={<Square size={16} />} label="Rect" onClick={() => onAddElement('rect')} />
@@ -51,6 +64,14 @@ export default function Sidebar({ activeTab, setActiveTab, onAddElement, onUploa
           </div>
         </div>
       )}
+
+      {/* --- COPYRIGHT FOOTER --- */}
+      <div style={{ marginTop: 'auto', padding: '15px', borderTop: '1px solid #eee', fontSize: '11px', color: '#888', textAlign: 'center', background: '#fafafa' }}>
+        <div style={{ marginBottom: '5px' }}>© {new Date().getFullYear()} <strong>Namal Chamodya</strong></div>
+        <a href="" target="_blank" rel="noreferrer" style={{ color: '#4f46e5', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+           Visit my Website <ExternalLink size={10}/>
+        </a>
+      </div>
     </div>
   );
 }
